@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AxaTests", "AxaTests.csproj", "{0AE49B3A-ECAF-4242-B2EC-3622CADED8EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AE49B3A-ECAF-4242-B2EC-3622CADED8EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AE49B3A-ECAF-4242-B2EC-3622CADED8EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AE49B3A-ECAF-4242-B2EC-3622CADED8EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AE49B3A-ECAF-4242-B2EC-3622CADED8EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01C91D6F-7759-4B8F-ADAD-EFA1178D791A}
+	EndGlobalSection
+EndGlobal
