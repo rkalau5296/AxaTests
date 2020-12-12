@@ -9,15 +9,19 @@ namespace AxaTests
         [TestMethod]
         public void FindTatooine()
         {
-            People people = new People();                        
+            People people = new People(); 
 
-            Planets planets = new Planets();           
+            Planets planets = new Planets();
 
-            Assert.AreEqual(planets.GetPlanets().Results[0].Url, people.GetPeople().Results[0].Homeworld);
+            Uri tatooineUri = planets.GetPlanets().Results[0].Url;
+            Uri lukeTatooineUri = people.GetPeople().Results[0].Homeworld;
+            string tatooine = planets.GetPlanets().Results[0].Name;            
 
-            Assert.AreEqual("Tatooine", planets.GetPlanets().Results[0].Name);            
+            Assert.AreEqual(tatooineUri, lukeTatooineUri);
 
-            Assert.AreEqual(planets.GetPlanets().Results[0].Name, planets.GetTatooine().Name);
+            Assert.AreEqual("Tatooine", tatooine);            
+
+            Assert.AreEqual(tatooine, planets.GetTatooine().Name);
 
         }
     }
