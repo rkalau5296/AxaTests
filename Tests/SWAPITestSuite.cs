@@ -1,3 +1,4 @@
+using AxaTests.ApiService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -23,6 +24,16 @@ namespace AxaTests
 
             Assert.AreEqual(tatooine, planets.GetTatooine().Name);
 
+        }
+
+
+        [TestMethod]
+
+        public void DetermineIfLukesHomeworldIsTatooine()
+        {
+            RestRequestService restRequestService = new RestRequestService();            
+
+            Assert.AreEqual("Tatooine", restRequestService.FindSpecificCharactersHomeworld("Luke Skywalker"));
         }
     }
 }

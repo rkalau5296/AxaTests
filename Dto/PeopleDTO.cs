@@ -29,6 +29,8 @@ namespace AxaTests.Dto
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Edited { get; set; }
         public Uri Url { get; set; }
+
+        
     }
 
     
