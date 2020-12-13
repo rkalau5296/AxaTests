@@ -87,7 +87,10 @@ namespace AxaTests.GoogleMaps
         {
             driver.FindElement(By.XPath("/html/body/jsl/div[3]/div[9]/div[3]/div[1]/div[2]/div/div[2]/div/div/div[1]/div[4]/button/img")).Click();
         }
-     
+        public void ClickByBicycle()
+        {
+            driver.FindElement(By.XPath("/html/body/jsl/div[3]/div[9]/div[3]/div[1]/div[2]/div/div[2]/div/div/div[2]/div[1]/div[1]/button/img")).Click();
+        }
         public void ClickModal()        {
 
             var modal = driver.SwitchTo().Frame(0);
