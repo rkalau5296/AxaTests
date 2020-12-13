@@ -33,11 +33,12 @@ namespace AxaTests.ApiService
             PeopleResult[] people = result.Results;
 
             PeopleResult specificCharacter = null;
-            for (int i=0; i<people.Length; i++)
+            foreach(PeopleResult man in people)
             {
-                if (people[i].Name == name)
-                    specificCharacter = people[i];
-            }
+                if (man.Name == name)
+                    specificCharacter = man;
+                    break;
+            }            
             
             RestClient restClientPlanets = new RestClient("https://swapi.dev/");
             RestRequest restRequestPlanets = new RestRequest("api/planets/", Method.GET);
@@ -51,11 +52,13 @@ namespace AxaTests.ApiService
             PlanetResult[] planets = resultPlanets.Results;
 
             PlanetResult planetResult = null;
-            for (int i = 0; i < planets.Length; i++)
+
+            foreach (PlanetResult planet in planets)
             {
-                if (planets[i].Url == specificCharacter.Homeworld)
-                    planetResult = planets[i];
-            }
+                if (planet.Url == specificCharacter.Homeworld)
+                    planetResult = planet;
+                    break;
+            }            
 
             return planetResult.Name;
 
