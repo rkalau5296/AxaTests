@@ -33,7 +33,7 @@ namespace AxaTests.ApiService
            
             while (specificCharacter == null)
             {
-                content = RestRequest(autoIncrementPageNumber(pageNumber));
+                content = RestRequest(autoIncrementPageNumber("people/?page=", pageNumber));
                 result = JsonConvert.DeserializeObject<PeopleDTO>(content.Content);
 
                 PeopleResult[] people = result.Results;
@@ -48,15 +48,14 @@ namespace AxaTests.ApiService
                     }
                 }
                 pageNumber++;
-                result = null;
-                content = null;
+                
             }
             pageNumber = 0;         
                        
 
             while(planetResult == null)
             {
-                restResponsePlanets = RestRequest(autoIncrementPlanetPageNumber(pageNumber));
+                restResponsePlanets = RestRequest(autoIncrementPageNumber("planets/?page=", pageNumber));
                 resultPlanets = JsonConvert.DeserializeObject<PlanetsDTO>(restResponsePlanets.Content);
                 PlanetResult[] planets = resultPlanets.Results;
 
@@ -70,8 +69,7 @@ namespace AxaTests.ApiService
 
                 }
                 pageNumber++;
-                resultPlanets = null;
-                restResponsePlanets = null;
+                
             }
                    
 
@@ -79,17 +77,12 @@ namespace AxaTests.ApiService
 
         }
 
-        public string autoIncrementPageNumber(int number)
+        public string autoIncrementPageNumber(string page, int number)
         {
             number++;            
-            return "people/?page=" + number.ToString();
+            return page + number.ToString();
         }
 
-        public string autoIncrementPlanetPageNumber(int number)
-        {
-            number++;
-            return "planets/?page=" + number.ToString();
-        }
     }
 
    
