@@ -21,49 +21,75 @@ namespace AxaTests.ApiService
         }
         public string FindSpecificCharactersHomeworld(string name)
         {
-            RestClient restClientPeople = new RestClient("https://swapi.dev/");
-            RestRequest restRequestPeople = new RestRequest("api/people/", Method.GET);
-            restRequestPeople.AddHeader("Accept", "application/json");
-            restRequestPeople.RequestFormat = DataFormat.Json;
-
-            IRestResponse restResponsePeople = restClientPeople.Execute(restRequestPeople);
-
-            PeopleDTO result = JsonConvert.DeserializeObject<PeopleDTO>(restResponsePeople.Content);
-
-            PeopleResult[] people = result.Results;
-
             PeopleResult specificCharacter = null;
-            foreach(PeopleResult man in people)
-            {
-                if (man.Name == name)
-                    specificCharacter = man;
-                    break;
-            }            
-            
-            RestClient restClientPlanets = new RestClient("https://swapi.dev/");
-            RestRequest restRequestPlanets = new RestRequest("api/planets/", Method.GET);
-            restRequestPlanets.AddHeader("Accept", "application/json");
-            restRequestPlanets.RequestFormat = DataFormat.Json;
-
-            IRestResponse restResponsePlanets = restClientPlanets.Execute(restRequestPlanets);
-
-            PlanetsDTO resultPlanets = JsonConvert.DeserializeObject<PlanetsDTO>(restResponsePlanets.Content);
-
-            PlanetResult[] planets = resultPlanets.Results;
-
             PlanetResult planetResult = null;
 
-            foreach (PlanetResult planet in planets)
+            int pageNumber = 0;
+            PeopleDTO result;
+            IRestResponse content;
+
+            PlanetsDTO resultPlanets;
+            IRestResponse restResponsePlanets;
+           
+            while (specificCharacter == null)
             {
-                if (planet.Url == specificCharacter.Homeworld)
-                    planetResult = planet;
-                    break;
-            }            
+                content = RestRequest(autoIncrementPageNumber(pageNumber));
+                result = JsonConvert.DeserializeObject<PeopleDTO>(content.Content);
+
+                PeopleResult[] people = result.Results;
+
+
+                foreach (PeopleResult man in people)
+                {
+                    if (man.Name == name)
+                    {
+                        specificCharacter = man;
+                        break;
+                    }
+                }
+                pageNumber++;
+                result = null;
+                content = null;
+            }
+            pageNumber = 0;         
+                       
+
+            while(planetResult == null)
+            {
+                restResponsePlanets = RestRequest(autoIncrementPlanetPageNumber(pageNumber));
+                resultPlanets = JsonConvert.DeserializeObject<PlanetsDTO>(restResponsePlanets.Content);
+                PlanetResult[] planets = resultPlanets.Results;
+
+                foreach (PlanetResult planet in planets)
+                {
+                    if (planet.Url == specificCharacter.Homeworld)
+                    {
+                        planetResult = planet;
+                        break;
+                    }
+
+                }
+                pageNumber++;
+                resultPlanets = null;
+                restResponsePlanets = null;
+            }
+                   
 
             return planetResult.Name;
 
         }
-        
+
+        public string autoIncrementPageNumber(int number)
+        {
+            number++;            
+            return "people/?page=" + number.ToString();
+        }
+
+        public string autoIncrementPlanetPageNumber(int number)
+        {
+            number++;
+            return "planets/?page=" + number.ToString();
+        }
     }
 
    

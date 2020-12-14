@@ -35,5 +35,38 @@ namespace AxaTests
 
             Assert.AreEqual("Tatooine", restRequestService.FindSpecificCharactersHomeworld("Luke Skywalker"));
         }
+
+        [TestMethod]
+
+        public void DetermineIfBobaFettsHomeworldIsTatooine()
+        {
+            RestRequestService restRequestService = new RestRequestService();
+
+            Assert.AreEqual("Kamino", restRequestService.FindSpecificCharactersHomeworld("Boba Fett"));
+        }
+
+        [TestMethod]
+        public void DetermineIfBenQuadinarossHomeworldIsTund()
+        {
+            RestRequestService restRequestService = new RestRequestService();
+
+            Assert.AreEqual("Tund", restRequestService.FindSpecificCharactersHomeworld("Ben Quadinaros"));
+        }
+
+        [TestMethod]
+        public void DetermineIfTionMedonsHomeworldIsUtapau()
+        {
+            RestRequestService restRequestService = new RestRequestService();
+
+            Assert.AreEqual("Utapau", restRequestService.FindSpecificCharactersHomeworld("Tion Medon"));
+        }
+
+        [TestMethod]
+        public void DetermineIfSlyMooresHomeworldIsUmbara()
+        {
+            RestRequestService restRequestService = new RestRequestService();
+
+            Assert.AreEqual("Umbara", restRequestService.FindSpecificCharactersHomeworld("Sly Moore"));
+        }
     }
 }

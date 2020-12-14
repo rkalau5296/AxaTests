@@ -14,9 +14,9 @@ namespace AxaTests.Dto
     public partial class PlanetResult
     {
         public string Name { get; set; }
-        public long RotationPeriod { get; set; }
-        public long OrbitalPeriod { get; set; }
-        public long Diameter { get; set; }
+        public string RotationPeriod { get; set; }
+        public string OrbitalPeriod { get; set; }
+        public string Diameter { get; set; }
         public string Climate { get; set; }
         public string Gravity { get; set; }
         public string Terrain { get; set; }

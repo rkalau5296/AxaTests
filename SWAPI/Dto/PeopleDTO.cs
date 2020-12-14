@@ -14,8 +14,8 @@ namespace AxaTests.Dto
     public partial class PeopleResult
     {
         public string Name { get; set; }
-        public long Height { get; set; }
-        public long Mass { get; set; }
+        public string Height { get; set; }
+        public string Mass { get; set; }
         public string HairColor { get; set; }
         public string SkinColor { get; set; }
         public string EyeColor { get; set; }
