@@ -23,101 +23,108 @@ namespace AxaTests
         public void Test()
         {
             googleMaps = new GoogleMapsPageObjects(driver);
-            googleMaps.GoToPage();
-            Thread.Sleep(2000);
+            googleMaps.GoToPage();           
             googleMaps.ClickModal();
-            googleMaps.ClickRoute();
-            Thread.Sleep(2000);
+            googleMaps.ClickRoute();            
         }
 
         [TestMethod]
         public void OnFootFromChlodnaToPlDefilad()
         {
             googleMaps.ClickOnFoot();
-            Thread.Sleep(2000);
             googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopFrom();
-            Thread.Sleep(2000);
             googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopTo();
-            Thread.Sleep(2000);
-            List<int> times = googleMaps.FromChlodnaToPlDefiladTimes();
-            List<double> distances = googleMaps.FromChlodnaToPlDefiladDistances();
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
 
-            Assert.IsTrue(times[0] < 40, "The first route's time is less then 40 min.");
-            Assert.IsTrue(times[1] < 40, "The second route's time is less then 40 min.");
-            Assert.IsTrue(distances[0] < 3, "The first route's distances is less then 3 km.");
-            Assert.IsTrue(distances[1] < 3, "The second route's distances is less then 3 km.");
+            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
+            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+
+            foreach (IWebElement time in times)
+            {
+                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
+                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");
+            }
+            foreach (IWebElement distance in distances)
+            {
+                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
+                Assert.IsTrue(trimedDisnace < 40, "The route's time is less then 40 min.");
+            }
 
         }
         [TestMethod]
         public void ByBicycleFromChlodnaToPlDefilad()
         {
-            googleMaps.ClickByBicycle();
-            Thread.Sleep(2000);
-            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopFrom();
-            Thread.Sleep(2000);
-            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopTo();
-            Thread.Sleep(2000);
-            List<int> times = googleMaps.FromChlodnaToPlDefiladTimes();
-            List<double> distances = googleMaps.FromChlodnaToPlDefiladDistances();
-
-            Assert.IsTrue(times[0] < 15, "The first route's time is less then 15 min.");
-            Assert.IsTrue(times[1] < 15, "The second route's time is less then 15 min.");
-            Assert.IsTrue(distances[0] < 3, "The first route's distances is less then 3 km.");
-            Assert.IsTrue(distances[1] < 3, "The second route's distances is less then 3 km.");
-
+            googleMaps.ClickByBicycle();           
+            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");            
+            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");            
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            
+            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
+            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+          
+            foreach (IWebElement time in times)           
+            {
+                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
+                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");            
+            }
+            foreach (IWebElement distance in distances)
+            {
+                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
+                Assert.IsTrue(trimedDisnace < 40, "The route's time is less then 40 min.");
+            }
         }
         [TestMethod]
         public void ByBicycleFromPlDefiladToChlodna()
         {
             googleMaps.ClickByBicycle();
-            Thread.Sleep(2000);
-            googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");            
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopFrom();
-            Thread.Sleep(2000);
+            googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
             googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopTo();
-            Thread.Sleep(2000);
-            List<int> times = googleMaps.FromChlodnaToPlDefiladTimes();
-            List<double> distances = googleMaps.FromChlodnaToPlDefiladDistances();
+            
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
 
-            Assert.IsTrue(times[0] < 15, "The first route's time is less then 15 min.");
-            Assert.IsTrue(times[1] < 15, "The second route's time is less then 15 min.");
-            Assert.IsTrue(distances[0] < 3, "The first route's distances is less then 3 km.");
-            Assert.IsTrue(distances[1] < 3, "The second route's distances is less then 3 km.");
+            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
+            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+
+            foreach (IWebElement time in times)
+            {
+                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
+                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");
+            }
+            foreach (IWebElement distance in distances)
+            {
+                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
+                Assert.IsTrue(trimedDisnace < 3, "The first route's distances is less then 3 km.");
+            }            
 
         }
         [TestMethod]
         public void OnFootFromPlDefiladToChlodna()
         {
-            googleMaps.ClickOnFoot();
-            Thread.Sleep(2000);
-            googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopFrom();
-            Thread.Sleep(2000);
-            googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
-            Thread.Sleep(2000);
-            googleMaps.SearchLoopTo();
-            Thread.Sleep(2000);
-            List<int> times = googleMaps.FromChlodnaToPlDefiladTimes();
-            List<double> distances = googleMaps.FromChlodnaToPlDefiladDistances();
+            googleMaps.ClickByBicycle();
+            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
+            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
 
-            Assert.IsTrue(times[0] < 40, "The first route's time is less then 40 min.");
-            Assert.IsTrue(times[1] < 40, "The second route's time is less then 40 min.");
-            Assert.IsTrue(distances[0] < 3, "The first route's distances is less then 3 km.");
-            Assert.IsTrue(distances[1] < 3, "The second route's distances is less then 3 km.");
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
 
+            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
+            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+
+            foreach (IWebElement time in times)
+            {
+                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
+                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");
+            }
+            foreach (IWebElement distance in distances)
+            {
+                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
+                Assert.IsTrue(trimedDisnace < 3, "The first route's distances is less then 3 km.");
+            }
         }
+
         [TestCleanup]
         public void MyTestCleanup()
         {
