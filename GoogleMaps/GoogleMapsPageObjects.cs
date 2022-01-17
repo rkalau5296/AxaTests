@@ -3,6 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace AxaTests.GoogleMaps
 {
@@ -19,7 +20,9 @@ namespace AxaTests.GoogleMaps
         }     
 
      
-     
+        IWebElement Pieszo  => driver.FindElement(By.CssSelector("[aria-label='Pieszo']"));
+        IWebElement NaRowerze => driver.FindElement(By.CssSelector("[aria-label='Na rowerze']"));
+
 
         public void YourLocationInput(string locationFrom)
         {
@@ -44,12 +47,14 @@ namespace AxaTests.GoogleMaps
         }
 
         public void ClickOnFoot()
-        {
-            driver.FindElement(By.CssSelector("[aria-label='Pieszo']")).Click();
+        {            
+            Thread.Sleep(2000);
+            Pieszo.Click();
         }
         public void ClickByBicycle()
-        {
-            driver.FindElement(By.CssSelector("[aria-label='Na rowerze']")).Click();
+        {         
+            Thread.Sleep(2000);
+            NaRowerze.Click();
         }
         public void ClickModal()
         {             
