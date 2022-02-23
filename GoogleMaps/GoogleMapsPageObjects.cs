@@ -24,6 +24,7 @@ namespace AxaTests.GoogleMaps
         public IWebElement NaRowerze => driver.FindElement(By.CssSelector("[aria-label='Na rowerze']"));
         public IWebElement YourLocationInputSearchButton => driver.FindElement(By.XPath("//*[@id='directions-searchbox-0']/button[1]"));
         public IWebElement TargetLocationInputSearchButton => driver.FindElement(By.XPath("//*[@id='directions-searchbox-1']/button[1]"));
+        public IWebElement Route => driver.FindElement(By.ClassName("xoLGzf-T3iPGc-icon"));
 
 
         public void YourLocationInput(string locationFrom)
@@ -49,19 +50,22 @@ namespace AxaTests.GoogleMaps
         }
 
         public void ClickOnFoot()
-        {            
-            Thread.Sleep(2000);
-            Pieszo.Click();
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='Pieszo']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(Pieszo)).Click();           
         }
         public void ClickByBicycle()
-        {         
-            Thread.Sleep(2000);
-            NaRowerze.Click();
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='Na rowerze']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NaRowerze)).Click();            
         }
-        public void ClickModal()
-        {             
-            driver.FindElement(By.XPath("//*[contains (text(), 'Zgadzam się')]")).Click();
-            //driver.FindElement(By.CssSelector("[value='Zgadzam się']")).Click();
+        public void ClickModal()        {            
+            
+            var element = driver.FindElements(By.XPath("//*[contains (text(), 'Zgadzam się')]"));
+            if (element.Count>0)
+                element[0].Click();
+            else
+            driver.FindElement(By.CssSelector("[value='Zgadzam się']")).Click();
         }
 
         public IList<IWebElement> FindTimes()

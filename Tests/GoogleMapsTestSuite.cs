@@ -27,14 +27,18 @@ namespace AxaTests
         [TestInitialize]
         public void Test()
         {
-            ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--headless");
-            driver = new ChromeDriver();
-            //driver = new EdgeDriver();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("--headless");
+            EdgeOptions edgeOptions = new EdgeOptions();
+            edgeOptions.AddArgument("--headless");
+            
+            //driver = new ChromeDriver(chromeOptions);
+            driver = new EdgeDriver(edgeOptions);
+            
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();           
             googleMaps.ClickModal();
-            googleMaps.ClickRoute();
+            googleMaps.Route.Click();
             
         }
 
