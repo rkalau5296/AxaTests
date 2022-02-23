@@ -3,7 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Opera;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,17 +18,24 @@ namespace AxaTests
     [TestClass]
     public class GoogleMapsTestSuite
     {
-        IWebDriver driver = new ChromeDriver();
+        IWebDriver driver;
 
+        IList<IWebElement> times;
+        IList<IWebElement> distances;
         GoogleMapsPageObjects googleMaps;
 
         [TestInitialize]
         public void Test()
         {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--headless");
+            driver = new ChromeDriver();
+            //driver = new EdgeDriver();
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();           
             googleMaps.ClickModal();
-            googleMaps.ClickRoute();            
+            googleMaps.ClickRoute();
+            
         }
 
         [TestMethod]
@@ -33,12 +43,16 @@ namespace AxaTests
         {
             googleMaps.ClickOnFoot();
             googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
+            googleMaps.YourLocationInputSearchButton.Click();
             googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            googleMaps.TargetLocationInputSearchButton.Click();
 
-            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
-            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+
+            times = googleMaps.FindTimes();
+            distances = googleMaps.FindDistances();         
+            
 
             foreach (IWebElement time in times)
             {
@@ -55,15 +69,18 @@ namespace AxaTests
         [TestMethod]
         public void ByBicycleFromChlodnaToPlDefilad()
         {
-            googleMaps.ClickByBicycle();           
-            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");            
-            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");            
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
-            
-            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
-            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
-          
+            googleMaps.ClickByBicycle();
+            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
+            googleMaps.YourLocationInputSearchButton.Click();
+            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
+            googleMaps.TargetLocationInputSearchButton.Click();
+
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+
+            times = googleMaps.FindTimes();
+            distances = googleMaps.FindDistances();
+
             foreach (IWebElement time in times)           
             {
                 int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
@@ -80,13 +97,15 @@ namespace AxaTests
         {
             googleMaps.ClickByBicycle();
             googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
+            googleMaps.YourLocationInputSearchButton.Click();
             googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
-            
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            googleMaps.TargetLocationInputSearchButton.Click();
 
-            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
-            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+
+            times = googleMaps.FindTimes();
+            distances = googleMaps.FindDistances();
 
             foreach (IWebElement time in times)
             {
@@ -105,13 +124,15 @@ namespace AxaTests
         {
             googleMaps.ClickByBicycle();
             googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
+            googleMaps.YourLocationInputSearchButton.Click();
             googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
+            googleMaps.TargetLocationInputSearchButton.Click();
 
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
-            driver.FindElement(By.CssSelector("[aria-label='Zamień punkt początkowy i docelowy']")).Click();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
 
-            IList<IWebElement> times = driver.FindElements(By.CssSelector("[jstcache='1158']"));
-            IList<IWebElement> distances = driver.FindElements(By.CssSelector("[jstcache='1159']"));
+            times = googleMaps.FindTimes();
+            distances = googleMaps.FindDistances();
 
             foreach (IWebElement time in times)
             {
