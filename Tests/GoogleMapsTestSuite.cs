@@ -66,7 +66,7 @@ namespace AxaTests
             foreach (IWebElement distance in distances)
             {
                 double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace < 40, "The route's time is less then 40 min.");
+                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 min.");
             }
 
         }
@@ -88,12 +88,12 @@ namespace AxaTests
             foreach (IWebElement time in times)           
             {
                 int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");            
+                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");            
             }
             foreach (IWebElement distance in distances)
             {
                 double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace < 40, "The route's time is less then 40 min.");
+                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 min.");
             }
         }
         [TestMethod]
@@ -119,17 +119,17 @@ namespace AxaTests
             foreach (IWebElement distance in distances)
             {
                 double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace < 3, "The first route's distances is less then 3 km.");
+                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 km.");
             }            
 
         }
         [TestMethod]
         public void OnFootFromPlDefiladToChlodna()
         {
-            googleMaps.ClickByBicycle();
-            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
+            googleMaps.ClickOnFoot();
+            googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
             googleMaps.YourLocationInputSearchButton.Click();
-            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
+            googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
             googleMaps.TargetLocationInputSearchButton.Click();
 
             new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
@@ -141,12 +141,12 @@ namespace AxaTests
             foreach (IWebElement time in times)
             {
                 int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");
+                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");
             }
             foreach (IWebElement distance in distances)
             {
                 double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace < 3, "The first route's distances is less then 3 km.");
+                Assert.IsTrue(trimedDisnace <= 3, "The route's distances is less then 3 km.");
             }
         }
 
