@@ -9,7 +9,9 @@ using OpenQA.Selenium.Opera;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
@@ -149,6 +151,39 @@ namespace AxaTests
                 Assert.IsTrue(trimedDisnace <= 3, "The route's distances is less then 3 km.");
             }
         }
+        [TestMethod]
+        public void FromHomeToHotelByCar()
+        {
+            googleMaps.ClickByCar();
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
+            googleMaps.YourLocationInputSearchButton.Click();            
+            googleMaps.TargetLocationInput("Via Lucio Papirio, 61-1, 00174 Roma RM, Włochy");
+            //googleMaps.TargetLocationInput("Karkonoska 14, 58-540 Karpacz");
+            googleMaps.TargetLocationInputSearchButton.Click();            
+
+            while (googleMaps.isVisible());
+            
+
+            times = googleMaps.FindTimesByCar();
+            distances = googleMaps.FindDistances();
+
+
+            foreach(var time in times)
+            {
+                string[] sub = time.Text.Split();
+                int hours = int.Parse(sub[0]);
+                int minutes = int.Parse(sub[2]);
+                Assert.IsTrue(hours < 25 && minutes < 1420);
+            }
+            
+            foreach (IWebElement distance in distances)
+            {
+                double trimedDistance = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
+                Assert.IsTrue(trimedDistance <= 2700, "The route's distances is less then 700 km.");
+            }
+        }
+
+        
 
         [TestCleanup]
         public void MyTestCleanup()
