@@ -161,12 +161,10 @@ namespace AxaTests
             //googleMaps.TargetLocationInput("Karkonoska 14, 58-540 Karpacz");
             googleMaps.TargetLocationInputSearchButton.Click();            
 
-            while (googleMaps.isVisible());
-            
+            while (googleMaps.isVisible());            
 
             times = googleMaps.FindTimesByCar();
             distances = googleMaps.FindDistances();
-
 
             foreach(var time in times)
             {
@@ -181,9 +179,7 @@ namespace AxaTests
                 double trimedDistance = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
                 Assert.IsTrue(trimedDistance <= 2700, "The route's distances is less then 700 km.");
             }
-        }
-
-        
+        }        
 
         [TestCleanup]
         public void MyTestCleanup()
