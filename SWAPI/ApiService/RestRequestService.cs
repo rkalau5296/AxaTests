@@ -18,69 +18,58 @@ namespace AxaTests.ApiService
             IRestResponse restResponse = restClient.Execute(restRequest);
 
             return restResponse;
-        }
-        public string FindSpecificCharactersHomeworld(string name)
-        {
-            PeopleResult specificCharacter = null;
-            PlanetResult planetResult = null;
-
-            int pageNumber = 0;
-            PeopleDTO result;
-            IRestResponse content;
-
-            PlanetsDTO resultPlanets;
-            IRestResponse restResponsePlanets;
-           
-            while (specificCharacter == null)
-            {
-                content = RestRequest(autoIncrementPageNumber("people/?page=", pageNumber));
-                result = JsonConvert.DeserializeObject<PeopleDTO>(content.Content);
-
-                PeopleResult[] people = result.Results;
-
-
-                foreach (PeopleResult man in people)
-                {
-                    if (man.Name == name)
-                    {
-                        specificCharacter = man;
-                        break;
-                    }
-                }
-                pageNumber++;
-                
-            }
-            pageNumber = 0;         
-                       
-
-            while(planetResult == null)
-            {
-                restResponsePlanets = RestRequest(autoIncrementPageNumber("planets/?page=", pageNumber));
-                resultPlanets = JsonConvert.DeserializeObject<PlanetsDTO>(restResponsePlanets.Content);
-                PlanetResult[] planets = resultPlanets.Results;
-
-                foreach (PlanetResult planet in planets)
-                {
-                    if (planet.Url == specificCharacter.Homeworld)
-                    {
-                        planetResult = planet;
-                        break;
-                    }
-
-                }
-                pageNumber++;
-                
-            }
-                   
-
-            return planetResult.Name;
-
-        }
+        }       
 
         public string autoIncrementPageNumber(string page, int number)
         {
             number++;            
             return page + number.ToString();
+        }
+
+        public PlanetResult FindPlanet(string planetName, Uri uri)
+        {            
+            Planets planets = new Planets();
+            int pageNumber = 0;
+            PlanetResult planetResult = null;
+
+            while (planetResult == null)
+            {
+                var planetList = planets.GetPlanets(autoIncrementPageNumber("planets/?page=", pageNumber));
+                var results = planetList.Results;
+                foreach (var result in results)
+                {
+                    if (result.Name == planetName || result.Url == uri)
+                    {
+                        planetResult = result;
+                        break;
+                    }
+                }
+                pageNumber++;
+            }
+            return planetResult;
+        }        
+
+        public PeopleResult FindMan(string man)
+        {
+            People people = new People();
+            int pageNumber = 0;
+            PeopleResult peopleResult = null;
+
+            while(peopleResult == null)
+            {
+                var men = people.GetPeople(autoIncrementPageNumber("people/?page=", pageNumber));
+                var results = men.Results;
+                foreach (var result in results)
+                {
+                    if (result.Name == man)
+                    {
+                        peopleResult = result;
+                        break;
+                    }
+                }
+                pageNumber++;
+            }
+            return peopleResult;
         }
 
     }

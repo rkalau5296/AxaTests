@@ -10,9 +10,11 @@ namespace AxaTests
 {
     public class People : RestRequestService
     {
-        public PeopleDTO GetPeople()       
+        public PeopleDTO GetPeople(string path)       
         {
-            return JsonConvert.DeserializeObject<PeopleDTO>(RestRequest("people/").Content);           
+            var content = RestRequest(path).Content;
+            var people = JsonConvert.DeserializeObject<PeopleDTO>(content);
+            return people;         
         }
     }
 }

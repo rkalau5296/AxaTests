@@ -11,14 +11,12 @@ namespace AxaTests
     public class Planets : RestRequestService
     {
     
-        public PlanetsDTO GetPlanets()
-        {      
-            return JsonConvert.DeserializeObject<PlanetsDTO>(RestRequest("planets/").Content);            
-        }
-
-        public PlanetResult GetTatooine() 
+        public PlanetsDTO GetPlanets(string path)
         {
-            return JsonConvert.DeserializeObject<PlanetResult>(RestRequest("planets/1/").Content);            
+            var content = RestRequest(path).Content;
+            var planets = JsonConvert.DeserializeObject<PlanetsDTO>(content);
+            return planets;
         }
+        
     }
 }

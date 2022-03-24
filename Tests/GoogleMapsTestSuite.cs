@@ -39,9 +39,9 @@ namespace AxaTests
             FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
             service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
             
-            //driver = new ChromeDriver(chromeOptions);
+            driver = new ChromeDriver(chromeOptions);
             //driver = new EdgeDriver(edgeOptions);
-            driver = new FirefoxDriver(service, firefoxOptions);
+            //driver = new FirefoxDriver(service, firefoxOptions);
             
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();           
@@ -101,7 +101,7 @@ namespace AxaTests
             foreach (IWebElement distance in distances)
             {
                 double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 min.");
+                Assert.IsTrue(trimedDisnace <= 4, "The route's distance is less then 4 min.");
             }
         }
         [TestMethod]

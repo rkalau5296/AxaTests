@@ -1,4 +1,5 @@
 using AxaTests.ApiService;
+using AxaTests.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -7,66 +8,53 @@ namespace AxaTests
     [TestClass]
     public class SWAPITestSuite
     {
+        RestRequestService restRequestService = new RestRequestService();
+
         [TestMethod]
         public void FindTatooine()
-        {
-            People people = new People(); 
-
-            Planets planets = new Planets();
-
-            Uri tatooineUri = planets.GetPlanets().Results[0].Url;
-            Uri lukeTatooineUri = people.GetPeople().Results[0].Homeworld;
-            string tatooine = planets.GetPlanets().Results[0].Name;            
-
-            Assert.AreEqual(tatooineUri, lukeTatooineUri);
-
-            Assert.AreEqual("Tatooine", tatooine);            
-
-            Assert.AreEqual(tatooine, planets.GetTatooine().Name);
-
-        }
-
-
-        [TestMethod]
-
-        public void DetermineIfLukesHomeworldIsTatooine()
-        {
-            RestRequestService restRequestService = new RestRequestService();            
-
-            Assert.AreEqual("Tatooine", restRequestService.FindSpecificCharactersHomeworld("Luke Skywalker"));
+        {          
+            var planet = restRequestService.FindPlanet("Tatooine", null);
+            Assert.AreEqual("Tatooine", planet.Name);            
         }
 
         [TestMethod]
-
-        public void DetermineIfBobaFettsHomeworldIsTatooine()
-        {
-            RestRequestService restRequestService = new RestRequestService();
-
-            Assert.AreEqual("Kamino", restRequestService.FindSpecificCharactersHomeworld("Boba Fett"));
+        public void LukesHomeworldIsTatooine()
+        {            
+            var luke = restRequestService.FindMan("Luke Skywalker");            
+            var planet = restRequestService.FindPlanet(null, luke.Homeworld);
+            Assert.AreEqual("Tatooine", planet.Name);
         }
 
         [TestMethod]
-        public void DetermineIfBenQuadinarossHomeworldIsTund()
+        public void BobaFettsHomeworldIsKamino()
         {
-            RestRequestService restRequestService = new RestRequestService();
-
-            Assert.AreEqual("Tund", restRequestService.FindSpecificCharactersHomeworld("Ben Quadinaros"));
+            var bobaFett = restRequestService.FindMan("Boba Fett");
+            var planet = restRequestService.FindPlanet(null, bobaFett.Homeworld);
+            Assert.AreEqual("Kamino", planet.Name);
         }
 
         [TestMethod]
-        public void DetermineIfTionMedonsHomeworldIsUtapau()
+        public void BenQuadinarossHomeworldIsTund()
         {
-            RestRequestService restRequestService = new RestRequestService();
-
-            Assert.AreEqual("Utapau", restRequestService.FindSpecificCharactersHomeworld("Tion Medon"));
+            var benQuadinaros = restRequestService.FindMan("Ben Quadinaros");
+            var planet = restRequestService.FindPlanet(null, benQuadinaros.Homeworld);
+            Assert.AreEqual("Tund", planet.Name);
         }
 
         [TestMethod]
-        public void DetermineIfSlyMooresHomeworldIsUmbara()
+        public void TionMedonsHomeworldIsUtapau()
         {
-            RestRequestService restRequestService = new RestRequestService();
+            var tionMedon = restRequestService.FindMan("Tion Medon");
+            var planet = restRequestService.FindPlanet(null, tionMedon.Homeworld);
+            Assert.AreEqual("Utapau", planet.Name);
+        }
 
-            Assert.AreEqual("Umbara", restRequestService.FindSpecificCharactersHomeworld("Sly Moore"));
+        [TestMethod]
+        public void SlyMooresHomeworldIsUmbara()
+        {
+            var slyMoore = restRequestService.FindMan("Sly Moore");
+            var planet = restRequestService.FindPlanet(null, slyMoore.Homeworld);
+            Assert.AreEqual("Umbara", planet.Name);
         }
     }
 }
