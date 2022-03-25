@@ -15,8 +15,20 @@ namespace AxaTests
         {          
             var planet = restRequestService.FindPlanet("Tatooine", null);
             Assert.AreEqual("Tatooine", planet.Name);            
+        }        
+        [TestMethod]
+        public void FindCoruscant()
+        {
+            var planet = restRequestService.FindPlanet("Coruscant", null);
+            Assert.AreEqual("Coruscant", planet.Name);
         }
-
+        [TestMethod]
+        public void FindIridonia()
+        {
+            var planet = restRequestService.FindPlanet("Iridonia", null);
+            Assert.AreEqual("Iridonia", planet.Name);
+        }
+        
         [TestMethod]
         public void LukesHomeworldIsTatooine()
         {            
