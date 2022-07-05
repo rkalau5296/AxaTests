@@ -1,6 +1,7 @@
 ﻿using AxaTests.GoogleMaps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
@@ -30,23 +31,24 @@ namespace AxaTests
         public void Test()
         {
             ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.AddArgument("--headless");
-            EdgeOptions edgeOptions = new EdgeOptions();
-            edgeOptions.AddArgument("--headless");
-            FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.AddArgument("--headless");
+            //chromeOptions.AddArgument("--headless");
+            //EdgeOptions edgeOptions = new EdgeOptions();
+            //edgeOptions.AddArgument("--headless");
+            //FirefoxOptions firefoxOptions = new FirefoxOptions();
+            //firefoxOptions.AddArgument("--headless");
 
-            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
-            service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
+            //FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\Axa Tests", "geckodriver.exe");
+            //service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
             
             driver = new ChromeDriver(chromeOptions);
             //driver = new EdgeDriver(edgeOptions);
             //driver = new FirefoxDriver(service, firefoxOptions);
             
             googleMaps = new GoogleMapsPageObjects(driver);
-            googleMaps.GoToPage();           
-            googleMaps.ClickModal();
-            googleMaps.Route.Click();
+            googleMaps.GoToPage();
+            //googleMaps.ClickModal();
+            //googleMaps.Route.Click();
+            driver.FindElement(By.Id("hArJGc")).Click();
             
         }
 
@@ -58,10 +60,7 @@ namespace AxaTests
             googleMaps.YourLocationInputSearchButton.Click();
             googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
             googleMaps.TargetLocationInputSearchButton.Click();
-
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
-
+            
             times = googleMaps.FindTimes();
             distances = googleMaps.FindDistances();         
             
@@ -79,35 +78,56 @@ namespace AxaTests
 
         }
         [TestMethod]
-        public void ByBicycleFromChlodnaToPlDefilad()
+        public void ByBicycleFromRumianaToFloriana()
         {
-            googleMaps.ClickByBicycle();
-            googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
-            googleMaps.YourLocationInputSearchButton.Click();
-            googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
-            googleMaps.TargetLocationInputSearchButton.Click();
+            googleMaps.ChooseRoutingMethod("Na rowerze");
+            
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
 
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+            googleMaps.LoopFrom();
+            
+            googleMaps.TargetLocationInput("Floriana 1, 05-850 Ożarów Mazowiecki");
 
-            times = googleMaps.FindTimes();
-            distances = googleMaps.FindDistances();
+            googleMaps.LoopTo();
 
-            foreach (IWebElement time in times)           
+            googleMaps.ChooseRoutingMethod("Na rowerze");
+
+            var dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
+            while(dataInDiv.Count==0)
+                dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
+                        
+            foreach (var data in dataInDiv)
             {
-                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");            
+                if (data.Text.Contains("godz."))
+                {
+                    string[] newData = data.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Except(new string[] { "godz.", "min", "km", "\r\n" }).ToArray();
+                    int hours = int.Parse(newData[0]);
+                    int minutes = int.Parse(newData[1]);
+                    int distance = int.Parse(newData[2]);
+                    Assert.IsTrue(hours < 18);
+                    Assert.IsTrue(distance < 350);
+                }
+                else
+                {
+                    string[] newData = data.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Except(new string[] { "min", "km", "\r\n" }).ToArray();
+                    int minutes = int.Parse(newData[0]);
+                    double distance = double.Parse(newData[1]);
+                    Assert.IsTrue(minutes < 17);
+                    Assert.IsTrue(distance < 350);
+                }
+                
             }
-            foreach (IWebElement distance in distances)
-            {
-                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace <= 4, "The route's distance is less then 4 min.");
-            }
+            
+
+
+            
         }
         [TestMethod]
         public void ByBicycleFromPlDefiladToChlodna()
         {
-            googleMaps.ClickByBicycle();
+            googleMaps.ChooseRoutingMethod("Na rowerze");
             googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
             googleMaps.YourLocationInputSearchButton.Click();
             googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");

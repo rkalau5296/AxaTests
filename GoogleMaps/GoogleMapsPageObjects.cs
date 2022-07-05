@@ -18,28 +18,64 @@ namespace AxaTests.GoogleMaps
         }
         
         public IWebElement Pieszo  => driver.FindElement(By.CssSelector("[aria-label='Pieszo']"));
-        public IWebElement NaRowerze => driver.FindElement(By.CssSelector("[aria-label='Na rowerze']"));
-        public IWebElement YourLocationInputSearchButton => driver.FindElement(By.XPath("//*[@id='directions-searchbox-0']/button[1]"));        
-        public IWebElement TargetLocationInputSearchButton => driver.FindElement(By.CssSelector("#directions-searchbox-1 > button.nhb85d-BIqFsb"));
+        public IWebElement NaRowerze => driver.FindElement(By.XPath("//button[@aria-checked='true']/img"));
+        public IWebElement YourLocationInputSearchButton => driver.FindElement(By.XPath("//*[@id='directions-searchbox-0']/button[@data-tooltip='Szukaj]"));        
+        public IWebElement TargetLocationInputSearchButton => driver.FindElement(By.XPath("//div[@id='directions-searchbox-1']/button[@aria-label='Szukaj']"));
         public IWebElement Route => driver.FindElement(By.CssSelector("#xoLGzf-T3iPGc > .xoLGzf-T3iPGc-icon"));
         public IWebElement Samochodem => driver.FindElement(By.CssSelector("#omnibox-directions > div > div.Zvyb8e-T3iPGc-urwkYd-WAutxc-OomVLb-haAclf > div > div > div.z8Wzid-wcotoc-vAeulc-wwuYjd.Wnt0je-urwkYd-WAutxc-NGme3c > div:nth-child(2) > button > img"));
+        public IWebElement inputFrom => driver.FindElement(By.CssSelector("#sb_ifc51 > input"));
+        public IWebElement inputTo => driver.FindElement(By.XPath("//*[@id='sb_ifc52']/input"));
 
         public void YourLocationInput(string locationFrom)
-        {            
-            IWebElement inputFrom = driver.FindElement(By.CssSelector("#sb_ifc51 > input"));
+        {
+            Thread.Sleep(1000);
             inputFrom.SendKeys(locationFrom);
         }
+        public void LoopFrom()
+        {
+            var loopsFrom = driver.FindElements(By.XPath("//*[@id='directions-searchbox-0']/button"));
+            foreach (var loop in loopsFrom)
+            {
+                var attribute = loop.GetAttribute("aria-label");
+                if (attribute == "Szukaj")
+                {
+                    try
+                    {
+                        IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+                        executor.ExecuteScript("arguments[0].click();", loop);
+                    }
+                    catch (Exception)
+                    {
 
+                    }
+                }
+            }
+        }
+
+        public void LoopTo()
+        {
+            var loopsFrom = driver.FindElements(By.XPath("//*[@id='directions-searchbox-1']/button"));
+            foreach (var loop in loopsFrom)
+            {
+                var attribute = loop.GetAttribute("aria-label");
+                if (attribute == "Szukaj")
+                {
+                    try
+                    {
+                        IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+                        executor.ExecuteScript("arguments[0].click();", loop);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+        }
         public void TargetLocationInput(string locationTo)
-        {
-            IWebElement inputTo = driver.FindElement(By.XPath("//*[@id='sb_ifc52']/input"));            
+        {                      
             inputTo.SendKeys(locationTo);
-        }
-
-        public void ClickRoute()
-        {
-            driver.FindElement(By.ClassName("xoLGzf-T3iPGc-icon")).Click();
-        }
+        }       
         
         public void GoToPage()
         {
@@ -51,10 +87,18 @@ namespace AxaTests.GoogleMaps
             new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='Pieszo']")));
             new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(Pieszo)).Click();           
         }
-        public void ClickByBicycle()
+        public void ChooseRoutingMethod(string routingMethod)
         {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='Na rowerze']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(NaRowerze)).Click();            
+            var divs = driver.FindElements(By.XPath("//*[@class='FkdJRd vRIAEd dS8AEf']/div"));
+            for (int i = 0; i < divs.Count; i++)
+            {
+                var button = divs[i].FindElement(By.XPath("button/img"));
+                var attribute = button.GetAttribute("aria-label");
+                if (attribute == routingMethod)
+                {
+                    button.Click();
+                }
+            }
         }
         public void ClickModal()        
         {
