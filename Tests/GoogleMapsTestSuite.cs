@@ -46,146 +46,94 @@ namespace AxaTests
             
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();
-            //googleMaps.ClickModal();
-            //googleMaps.Route.Click();
-            driver.FindElement(By.Id("hArJGc")).Click();
+            googleMaps.ClickModal();
+            googleMaps.Route.Click();
+            
             
         }
 
         [TestMethod]
         public void OnFootFromChlodnaToPlDefilad()
         {
-            googleMaps.ClickOnFoot();
+            googleMaps.ChooseRoutingMethod("Pieszo");
             googleMaps.YourLocationInput("Chłodna 51, 00-867 Warszawa");
-            googleMaps.YourLocationInputSearchButton.Click();
+            googleMaps.LoopFrom();
             googleMaps.TargetLocationInput("plac Defilad 1, 00-901 Warszawa");
-            googleMaps.TargetLocationInputSearchButton.Click();
-            
-            times = googleMaps.FindTimes();
-            distances = googleMaps.FindDistances();         
-            
+            googleMaps.LoopTo();
 
-            foreach (IWebElement time in times)
-            {
-                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");
-            }
-            foreach (IWebElement distance in distances)
-            {
-                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 min.");
-            }
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 40, 3);
+
 
         }
         [TestMethod]
         public void ByBicycleFromRumianaToFloriana()
         {
-            googleMaps.ChooseRoutingMethod("Na rowerze");
-            
+            googleMaps.ChooseRoutingMethod("Na rowerze");           
             googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
-
-            googleMaps.LoopFrom();
-            
+            googleMaps.LoopFrom();            
             googleMaps.TargetLocationInput("Floriana 1, 05-850 Ożarów Mazowiecki");
+            googleMaps.LoopTo();
+            
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 4, 2);
 
+        }
+        [TestMethod]
+        public void ByBicycleFromRumianaToTargDrzewny()
+        {
+            googleMaps.ChooseRoutingMethod("Na rowerze");
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
+            googleMaps.LoopFrom();
+            googleMaps.TargetLocationInput("Targ Drzewny 1, 80-886 Gdańsk");
             googleMaps.LoopTo();
 
-            googleMaps.ChooseRoutingMethod("Na rowerze");
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 20, 400);
 
-            var dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
-            while(dataInDiv.Count==0)
-                dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
-                        
-            foreach (var data in dataInDiv)
-            {
-                if (data.Text.Contains("godz."))
-                {
-                    string[] newData = data.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Except(new string[] { "godz.", "min", "km", "\r\n" }).ToArray();
-                    int hours = int.Parse(newData[0]);
-                    int minutes = int.Parse(newData[1]);
-                    int distance = int.Parse(newData[2]);
-                    Assert.IsTrue(hours < 18);
-                    Assert.IsTrue(distance < 350);
-                }
-                else
-                {
-                    string[] newData = data.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Except(new string[] { "min", "km", "\r\n" }).ToArray();
-                    int minutes = int.Parse(newData[0]);
-                    double distance = double.Parse(newData[1]);
-                    Assert.IsTrue(minutes < 17);
-                    Assert.IsTrue(distance < 350);
-                }
-                
-            }
-            
-
-
-            
         }
         [TestMethod]
         public void ByBicycleFromPlDefiladToChlodna()
         {
             googleMaps.ChooseRoutingMethod("Na rowerze");
             googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
-            googleMaps.YourLocationInputSearchButton.Click();
+            googleMaps.LoopFrom();
             googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
-            googleMaps.TargetLocationInputSearchButton.Click();
+            googleMaps.LoopTo();            
 
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
-            times = googleMaps.FindTimes();
-            distances = googleMaps.FindDistances();
-
-            foreach (IWebElement time in times)
-            {
-                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 15, "The route's time is less then 15 min.");
-            }
-            foreach (IWebElement distance in distances)
-            {
-                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace <= 3, "The route's distance is less then 3 km.");
-            }            
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 15, 3);           
 
         }
         [TestMethod]
         public void OnFootFromPlDefiladToChlodna()
         {
-            googleMaps.ClickOnFoot();
+            googleMaps.ChooseRoutingMethod("Pieszo");
             googleMaps.YourLocationInput("plac Defilad 1, 00-901 Warszawa");
-            googleMaps.YourLocationInputSearchButton.Click();
+            googleMaps.LoopFrom();
             googleMaps.TargetLocationInput("Chłodna 51, 00-867 Warszawa");
-            googleMaps.TargetLocationInputSearchButton.Click();
+            googleMaps.LoopTo();
 
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']")));
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
-            times = googleMaps.FindTimes();
-            distances = googleMaps.FindDistances();
-
-            foreach (IWebElement time in times)
-            {
-                int trimedTime = int.Parse(time.Text.Trim(new char[] { ' ', 'm', 'i', 'n' }));
-                Assert.IsTrue(trimedTime < 40, "The route's time is less then 40 min.");
-            }
-            foreach (IWebElement distance in distances)
-            {
-                double trimedDisnace = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDisnace <= 3, "The route's distances is less then 3 km.");
-            }
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 40, 3);
+            
         }
         [TestMethod]
         public void FromHomeToHotelByCar()
         {
-            googleMaps.ClickByCar();
+            googleMaps.ChooseRoutingMethod("Samochodem");
             googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
-            googleMaps.YourLocationInputSearchButton.Click();            
-            googleMaps.TargetLocationInput("Via Lucio Papirio, 61-1, 00174 Roma RM, Włochy");
-            //googleMaps.TargetLocationInput("Karkonoska 14, 58-540 Karpacz");
-            googleMaps.TargetLocationInputSearchButton.Click();            
+            googleMaps.LoopFrom();            
+            googleMaps.TargetLocationInput("Hotel Gołębiewski, Karkonoska 14, 58-540 Karpacz");            
+            googleMaps.LoopTo();
+
+            var list = driver.FindElements(By.XPath("//div[contains(@id, 'section-directions-trip')]"));
+
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
+
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 19, 1900);
 
             while (googleMaps.isVisible());            
 
