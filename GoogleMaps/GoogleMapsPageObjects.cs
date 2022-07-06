@@ -84,12 +84,7 @@ namespace AxaTests.GoogleMaps
         {
             driver.Navigate().GoToUrl(url);            
         }
-
-        public void ClickOnFoot()
-        {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[aria-label='Pieszo']")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(Pieszo)).Click();           
-        }
+        
         public void ChooseRoutingMethod(string routingMethod)
         {
             Thread.Sleep(500);
@@ -123,44 +118,13 @@ namespace AxaTests.GoogleMaps
                 edgeModal.First().Click();
             }
             
-        }
-
-        public IList<IWebElement> FindTimes()
-        {
-            return driver.FindElements(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1']"));            
-        }
-
-        public IList<IWebElement> FindDistances()
-        {
-            return driver.FindElements(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-tUvA6e xB1mrd-T3iPGc-iSfDt-K4efff-text gm2-body-2']"));
-        }
-
-        public void ClickByCar()
-        {
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("#omnibox-directions > div > div.Zvyb8e-T3iPGc-urwkYd-WAutxc-OomVLb-haAclf > div > div > div.z8Wzid-wcotoc-vAeulc-wwuYjd.Wnt0je-urwkYd-WAutxc-NGme3c > div:nth-child(2) > button > img")));
-            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(Samochodem)).Click();            
-        }
-
-        public IList<IWebElement> FindTimesByCar()
-        {
-            return driver.FindElements(By.XPath("//div[@class='xB1mrd-T3iPGc-iSfDt-duration gm2-subtitle-alt-1 delay-light']"));
-        } 
+        }                            
         
-        public bool isVisible()
-        {
-            var timesVisible = FindTimesByCar();
-            var distancesVisible = FindDistances();
-            if (timesVisible.Count == 0 || distancesVisible.Count == 0)
-            {
-                return false;
-            }
-            return true;
-        }
         public ReadOnlyCollection<IWebElement> FindSectionDirectionTrip()
-        {
-            var dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
+        {            
+            var dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]"));
             while (dataInDiv.Count == 0)
-                dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]/div[1]/div[3]/div[1]"));
+                dataInDiv = driver.FindElements(By.XPath("//div[contains (@id, 'section-directions-trip')]"));
 
             return dataInDiv;
         }
@@ -168,27 +132,59 @@ namespace AxaTests.GoogleMaps
         {
             foreach (var directionTrip in directionTripsList)
             {
+                string[] newData = directionTrip.Text.Replace("\r\n", " ")
+                                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                .Except(new string[] { "godz.", "min", "km" }).ToArray();
+
                 if (directionTrip.Text.Contains("godz."))
                 {
-                    string[] newData = directionTrip.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Except(new string[] { "godz.", "min", "km", "\r\n" }).ToArray();
-                    int hours = int.Parse(newData[0]);
-                    int minutes = int.Parse(newData[1]);
-                    int distance = int.Parse(newData[2]);
-                    Assert.IsTrue(hours < expectedTime);
-                    Assert.IsTrue(distance < expectedDistance);
+                    
+                    if (!directionTrip.Text.Contains("min"))
+                    {
+                        int hours = int.Parse(newData[0]);                        
+                        double distance = double.Parse(newData[1]);
+                        Assert.IsTrue(hours != 0);                        
+                        Assert.IsTrue(distance != 0);
+                        Assert.IsTrue(hours < expectedTime);
+                        Assert.IsTrue(distance < expectedDistance);
+                        continue;
+                    }
+                    if (!directionTrip.Text.Contains("km"))
+                    {
+                        int hours = int.Parse(newData[0]);
+                        int minutes = int.Parse(newData[0]);                        
+                        Assert.IsTrue(hours != 0);
+                        Assert.IsTrue(minutes != 0);                        
+                        Assert.IsTrue(hours < expectedTime);
+                        Assert.IsTrue(minutes < expectedTime);
+                        continue;
+                    }
+                    else
+                    {
+                        int hours = int.Parse(newData[0]);
+                        int minutes = int.Parse(newData[0]);
+                        double distance = double.Parse(newData[2]);
+                        Assert.IsTrue(hours != 0);
+                        Assert.IsTrue(minutes != 0);
+                        Assert.IsTrue(distance != 0);
+                        Assert.IsTrue(hours < expectedTime);
+                        Assert.IsTrue(minutes < expectedTime);
+                        Assert.IsTrue(distance < expectedDistance);
+                        continue;
+                    }
                 }
                 else
-                {
-                    string[] newData = directionTrip.Text.Replace("\r\n", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Except(new string[] { "min", "km", "\r\n" }).ToArray();
+                {                    
                     int minutes = int.Parse(newData[0]);
                     double distance = double.Parse(newData[1]);
+                    Assert.IsTrue(minutes != 0);
+                    Assert.IsTrue(distance != 0);
                     Assert.IsTrue(minutes < expectedTime);
                     Assert.IsTrue(distance < expectedDistance);
+                    continue;
                 }
 
             }
-        }
+        }        
     }
 }

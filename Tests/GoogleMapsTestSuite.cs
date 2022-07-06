@@ -21,28 +21,25 @@ namespace AxaTests
     [TestClass]
     public class GoogleMapsTestSuite
     {
-        IWebDriver driver;
-
-        IList<IWebElement> times;
-        IList<IWebElement> distances;
+        IWebDriver driver;        
         GoogleMapsPageObjects googleMaps;
 
         [TestInitialize]
         public void Test()
         {
-            ChromeOptions chromeOptions = new ChromeOptions();
+            //ChromeOptions chromeOptions = new ChromeOptions();
             //chromeOptions.AddArgument("--headless");
             //EdgeOptions edgeOptions = new EdgeOptions();
             //edgeOptions.AddArgument("--headless");
-            //FirefoxOptions firefoxOptions = new FirefoxOptions();
-            //firefoxOptions.AddArgument("--headless");
+            FirefoxOptions firefoxOptions = new FirefoxOptions();
+            firefoxOptions.AddArgument("--headless");
 
-            //FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\Axa Tests", "geckodriver.exe");
-            //service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
-            
-            driver = new ChromeDriver(chromeOptions);
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
+            service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
+
+            //driver = new ChromeDriver(chromeOptions);
             //driver = new EdgeDriver(edgeOptions);
-            //driver = new FirefoxDriver(service, firefoxOptions);
+            driver = new FirefoxDriver(service, firefoxOptions);
             
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();
@@ -127,34 +124,51 @@ namespace AxaTests
             googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
             googleMaps.LoopFrom();            
             googleMaps.TargetLocationInput("Hotel Gołębiewski, Karkonoska 14, 58-540 Karpacz");            
-            googleMaps.LoopTo();
-
-            var list = driver.FindElements(By.XPath("//div[contains(@id, 'section-directions-trip')]"));
+            googleMaps.LoopTo();            
 
             var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
             googleMaps.CheckTheTimesAndDistances(directionTripsList, 19, 1900);
+        }
+        [TestMethod]
+        public void FromHomeToHotelOnFoot()
+        {
+            googleMaps.ChooseRoutingMethod("Pieszo");
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
+            googleMaps.LoopFrom();
+            googleMaps.TargetLocationInput("Hotel Gołębiewski, Karkonoska 14, 58-540 Karpacz");
+            googleMaps.LoopTo();
 
-            while (googleMaps.isVisible());            
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
-            times = googleMaps.FindTimesByCar();
-            distances = googleMaps.FindDistances();
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 90, 500);
+        }
+        [TestMethod]
+        public void FromHomeToHotelOnTrain()
+        {
+            googleMaps.ChooseRoutingMethod("Transportem publicznym");
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
+            googleMaps.LoopFrom();
+            googleMaps.TargetLocationInput("Hotel Gołębiewski, Karkonoska 14, 58-540 Karpacz");
+            googleMaps.LoopTo();
 
-            foreach(var time in times)
-            {
-                string[] sub = time.Text.Split();
-                int hours = int.Parse(sub[0]);
-                int minutes = int.Parse(sub[2]);
-                Assert.IsTrue(hours < 25 && minutes < 1420);
-            }
-            
-            foreach (IWebElement distance in distances)
-            {
-                double trimedDistance = double.Parse(distance.Text.Trim(new char[] { ' ', 'k', 'm' }));
-                Assert.IsTrue(trimedDistance <= 2700, "The route's distances is less then 700 km.");
-            }
-        }        
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 18, 500);
+        }
+        [TestMethod]
+        public void FromHomeToHotelOnBike()
+        {
+            googleMaps.ChooseRoutingMethod("Na rowerze");
+            googleMaps.YourLocationInput("Rumiana 38, 05-850 Ożarów Mazowiecki");
+            googleMaps.LoopFrom();
+            googleMaps.TargetLocationInput("Hotel Gołębiewski, Karkonoska 14, 58-540 Karpacz");
+            googleMaps.LoopTo();
+
+            var directionTripsList = googleMaps.FindSectionDirectionTrip();
+
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 30, 500);
+        }
         [TestCleanup]
         public void MyTestCleanup()
         {
