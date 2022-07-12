@@ -34,7 +34,7 @@ namespace AxaTests
             FirefoxOptions firefoxOptions = new FirefoxOptions();
             firefoxOptions.AddArgument("--headless");
 
-            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\AxaTests", "geckodriver.exe");
             service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
 
             //driver = new ChromeDriver(chromeOptions);
@@ -141,7 +141,7 @@ namespace AxaTests
 
             var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
-            googleMaps.CheckTheTimesAndDistances(directionTripsList, 90, 500);
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 100, 500);
         }
         [TestMethod]
         public void FromHomeToHotelOnTrain()

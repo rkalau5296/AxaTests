@@ -8,7 +8,7 @@ namespace AxaTests
     [TestClass]
     public class SWAPITestSuite
     {
-        RestRequestService restRequestService = new RestRequestService();
+        private readonly RestRequestService restRequestService = new();
 
         [TestMethod]
         public void FindTatooine()

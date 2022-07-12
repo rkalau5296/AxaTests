@@ -8,7 +8,7 @@ namespace AxaTests.ApiService
 {
     public class RestRequestService
     {
-        public IRestResponse RestRequest(string recordNumber)
+        public static IRestResponse RestRequest(string recordNumber)
         {
             RestClient restClient = new RestClient("https://swapi.dev/");
             RestRequest restRequest = new RestRequest("api/" + recordNumber, Method.GET);
@@ -20,7 +20,7 @@ namespace AxaTests.ApiService
             return restResponse;
         }       
 
-        public string autoIncrementPageNumber(string page, int number)
+        public static string AutoIncrementPageNumber(string page, int number)
         {
             number++;            
             return page + number.ToString();
@@ -34,7 +34,7 @@ namespace AxaTests.ApiService
 
             while (planetResult == null)
             {
-                var planetList = planets.GetPlanets(autoIncrementPageNumber("planets/?page=", pageNumber));
+                var planetList = planets.GetPlanets(AutoIncrementPageNumber("planets/?page=", pageNumber));
                 var results = planetList.Results;
                 foreach (var result in results)
                 {
@@ -57,7 +57,7 @@ namespace AxaTests.ApiService
 
             while(peopleResult == null)
             {
-                var men = people.GetPeople(autoIncrementPageNumber("people/?page=", pageNumber));
+                var men = people.GetPeople(AutoIncrementPageNumber("people/?page=", pageNumber));
                 var results = men.Results;
                 foreach (var result in results)
                 {
