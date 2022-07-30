@@ -32,7 +32,7 @@ namespace AxaTests
             //EdgeOptions edgeOptions = new EdgeOptions();
             //edgeOptions.AddArgument("--headless");
             FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.AddArgument("--headless");
+            //firefoxOptions.AddArgument("--headless");
 
             FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
             service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
@@ -43,7 +43,7 @@ namespace AxaTests
             
             googleMaps = new GoogleMapsPageObjects(driver);
             googleMaps.GoToPage();
-            googleMaps.ClickModal();
+            googleMaps.ClickModal();            
             googleMaps.Route.Click();
             
             
@@ -141,7 +141,7 @@ namespace AxaTests
 
             var directionTripsList = googleMaps.FindSectionDirectionTrip();
 
-            googleMaps.CheckTheTimesAndDistances(directionTripsList, 90, 500);
+            googleMaps.CheckTheTimesAndDistances(directionTripsList, 91, 500);
         }
         [TestMethod]
         public void FromHomeToHotelOnTrain()

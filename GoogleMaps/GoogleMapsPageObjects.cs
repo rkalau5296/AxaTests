@@ -106,7 +106,7 @@ namespace AxaTests.GoogleMaps
         }
         public void ClickModal()        
         {
-            var googleModal = driver.FindElements(By.XPath("//*[@id='yDmH0d']/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div/div/button/span"));
+            var googleModal = driver.FindElements(By.XPath("//*[@id='yDmH0d']/c-wiz/div/div/div/div[2]/div[1]/div[3]/div[1]/div[1]/form[2]/div/div/button/span"));
             var edgeModal = driver.FindElements(By.CssSelector("[value='Zgadzam się']"));
             if (googleModal.Any())
             {
