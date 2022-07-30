@@ -20,12 +20,7 @@ namespace AxaTests.GoogleMaps
             this.driver = driver;            
         }
         
-        public IWebElement Pieszo  => driver.FindElement(By.CssSelector("[aria-label='Pieszo']"));
-        public IWebElement NaRowerze => driver.FindElement(By.XPath("//button[@aria-checked='true']/img"));
-        public IWebElement YourLocationInputSearchButton => driver.FindElement(By.XPath("//*[@id='directions-searchbox-0']/button[@data-tooltip='Szukaj]"));        
-        public IWebElement TargetLocationInputSearchButton => driver.FindElement(By.XPath("//div[@id='directions-searchbox-1']/button[@aria-label='Szukaj']"));
-        public IWebElement Route => driver.FindElement(By.Id("hArJGc"));
-        public IWebElement Samochodem => driver.FindElement(By.CssSelector("#omnibox-directions > div > div.Zvyb8e-T3iPGc-urwkYd-WAutxc-OomVLb-haAclf > div > div > div.z8Wzid-wcotoc-vAeulc-wwuYjd.Wnt0je-urwkYd-WAutxc-NGme3c > div:nth-child(2) > button > img"));
+        public IWebElement Route => driver.FindElement(By.Id("hArJGc"));        
         public IWebElement inputFrom => driver.FindElement(By.CssSelector("#sb_ifc51 > input"));
         public IWebElement inputTo => driver.FindElement(By.XPath("//*[@id='sb_ifc52']/input"));
 
