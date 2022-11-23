@@ -1,4 +1,5 @@
-﻿using AxaTests.GoogleMaps;
+﻿using AxaTests.BaseTest;
+using AxaTests.GoogleMaps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -19,35 +20,8 @@ using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 namespace AxaTests
 {
     [TestClass]
-    public class GoogleMapsTestSuite
-    {
-        IWebDriver driver;        
-        GoogleMapsPageObjects googleMaps;
-
-        [TestInitialize]
-        public void Test()
-        {
-            //ChromeOptions chromeOptions = new ChromeOptions();
-            //chromeOptions.AddArgument("--headless");
-            //EdgeOptions edgeOptions = new EdgeOptions();
-            //edgeOptions.AddArgument("--headless");
-            FirefoxOptions firefoxOptions = new FirefoxOptions();
-            //firefoxOptions.AddArgument("--headless");
-
-            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(@"C:\axa2", "geckodriver.exe");
-            service.FirefoxBinaryPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";            
-
-            //driver = new ChromeDriver(chromeOptions);
-            //driver = new EdgeDriver(edgeOptions);
-            driver = new FirefoxDriver(service, firefoxOptions);
-            
-            googleMaps = new GoogleMapsPageObjects(driver);
-            googleMaps.GoToPage();
-            googleMaps.ClickModal();            
-            googleMaps.Route.Click();
-            
-            
-        }
+    public class GoogleMapsTestSuite : BasicTest
+    {        
 
         [TestMethod]
         public void OnFootFromChlodnaToPlDefilad()
