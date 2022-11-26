@@ -20,7 +20,7 @@ namespace AxaTests.BaseTest
         public void Open()
         {
             BrowserFactory browserFactory = new(driver);
-            Browser runningBbrowser = browserFactory.RunBrowser(BrowserType.Chrome);
+            Browser runningBbrowser = browserFactory.RunBrowser(BrowserType.Firefox);
             driver = runningBbrowser.RunBrowser(driver);
 
             driver.Navigate().GoToUrl("https://www.google.com/");
@@ -30,8 +30,8 @@ namespace AxaTests.BaseTest
             googleMaps.Route.Click();
 
         }
-        [TearDown]
-        public void Close()
+        [TestCleanup]
+        public void MyTestCleanup()
         {
             driver.Quit();
         }

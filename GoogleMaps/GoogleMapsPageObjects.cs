@@ -21,13 +21,13 @@ namespace AxaTests.GoogleMaps
         }
         
         public IWebElement Route => driver.FindElement(By.Id("hArJGc"));        
-        public IWebElement inputFrom => driver.FindElement(By.CssSelector("#sb_ifc51 > input"));
-        public IWebElement inputTo => driver.FindElement(By.XPath("//*[@id='sb_ifc52']/input"));
+        public IWebElement InputFrom => driver.FindElement(By.CssSelector("#sb_ifc50 > input"));
+        public IWebElement InputTo => driver.FindElement(By.XPath("//*[@id='sb_ifc51']/input"));
 
         public void YourLocationInput(string locationFrom)
         {
             Thread.Sleep(1000);
-            inputFrom.SendKeys(locationFrom);
+            InputFrom.SendKeys(locationFrom);
         }
         public void LoopFrom()
         {
@@ -71,8 +71,8 @@ namespace AxaTests.GoogleMaps
             }
         }
         public void TargetLocationInput(string locationTo)
-        {                      
-            inputTo.SendKeys(locationTo);
+        {
+            InputTo.SendKeys(locationTo);
         }       
         
         public void GoToPage()

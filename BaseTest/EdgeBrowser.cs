@@ -16,7 +16,7 @@ namespace AxaTests.BaseTest
         public override IWebDriver RunBrowser(IWebDriver driver)
         {
             EdgeOptions edgeOptions = new();
-            edgeOptions.AddArgument("--headless");
+            //edgeOptions.AddArgument("--headless");
             edgeOptions.AddArgument("start-maximized");
 
             return new EdgeDriver(edgeOptions);

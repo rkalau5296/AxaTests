@@ -8,14 +8,14 @@ namespace AxaTests.ApiService
 {
     public class RestRequestService
     {
-        public static IRestResponse RestRequest(string recordNumber)
+        public static RestResponse RestRequest(string recordNumber)
         {
             RestClient restClient = new RestClient("https://swapi.dev/");
-            RestRequest restRequest = new RestRequest("api/" + recordNumber, Method.GET);
+            RestRequest restRequest = new RestRequest("api/" + recordNumber, Method.Get);
             restRequest.AddHeader("Accept", "application/json");
             restRequest.RequestFormat = DataFormat.Json;
 
-            IRestResponse restResponse = restClient.Execute(restRequest);
+            RestResponse restResponse = restClient.Execute(restRequest);
 
             return restResponse;
         }       
