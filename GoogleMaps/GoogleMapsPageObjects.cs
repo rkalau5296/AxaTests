@@ -1,19 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace AxaTests.GoogleMaps
 {
     public class GoogleMapsPageObjects
     {
-        private IWebDriver driver;
-        private string url = "https://www.google.pl/maps/";
+        private readonly IWebDriver driver;
+        private readonly string url = "https://www.google.pl/maps/";
         
         public GoogleMapsPageObjects(IWebDriver driver)
         {

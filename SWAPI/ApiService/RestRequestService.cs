@@ -1,8 +1,6 @@
 ﻿using AxaTests.Dto;
-using Newtonsoft.Json;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 
 namespace AxaTests.ApiService
 {
@@ -10,8 +8,9 @@ namespace AxaTests.ApiService
     {
         public static RestResponse RestRequest(string recordNumber)
         {
-            RestClient restClient = new RestClient("https://swapi.dev/");
-            RestRequest restRequest = new RestRequest("api/" + recordNumber, Method.Get);
+            RestClient restClient = new("https://swapi.dev/");
+
+            RestRequest restRequest = new("api/" + recordNumber, Method.Get);
             restRequest.AddHeader("Accept", "application/json");
             restRequest.RequestFormat = DataFormat.Json;
 

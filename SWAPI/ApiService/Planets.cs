@@ -1,10 +1,6 @@
 ﻿using AxaTests.ApiService;
 using AxaTests.Dto;
 using Newtonsoft.Json;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AxaTests
 {

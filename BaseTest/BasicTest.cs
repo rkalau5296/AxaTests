@@ -1,12 +1,6 @@
 ﻿using AxaTests.GoogleMaps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AxaTests.BaseTest
 {
@@ -19,11 +13,10 @@ namespace AxaTests.BaseTest
         [TestInitialize]
         public void Open()
         {
-            BrowserFactory browserFactory = new(driver);
-            Browser runningBbrowser = browserFactory.RunBrowser(BrowserType.Firefox);
+            BrowserFactory browserFactory = new();
+            Browser runningBbrowser = browserFactory.RunBrowser(BrowserType.Edge);
             driver = runningBbrowser.RunBrowser(driver);
-
-            driver.Navigate().GoToUrl("https://www.google.com/");
+            
             googleMaps = new(driver);
             googleMaps.GoToPage();
             googleMaps.ClickModal();
