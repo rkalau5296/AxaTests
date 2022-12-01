@@ -3,7 +3,7 @@ using AxaTests.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace AxaTests
+namespace AxaTests.Tests
 {
     [TestClass]
     public class SWAPITestSuite

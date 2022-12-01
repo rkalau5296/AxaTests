@@ -126,7 +126,8 @@ namespace AxaTests.GoogleMaps
             {
                 string[] newData = directionTrip.Text.Replace("\r\n", " ")
                                 .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                                .Except(new string[] { "godz.", "min", "km" }).ToArray();
+                                .Except(new string[] { "godz.", "min", "km" })
+                                .ToArray();
 
                 if (directionTrip.Text.Contains("godz."))
                 {

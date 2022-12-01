@@ -15,13 +15,13 @@ namespace AxaTests.SWAPI.ApiService
     public class RestService<T>
     {
 
-        public object GetData(string typeOfData, string character)
+        public object GetData(string typeOfData, string data)
         {
             int pageNumber = 1;
-            object characterName = null;
-            object characterHomeworld = null;
-            
-            while (characterHomeworld == null)
+            object name = null;
+            object homeworld = null;
+            object url = null;
+            while (homeworld == null && url == null)
             {
                 string path = typeOfData + "/?page=" + pageNumber;
 
@@ -42,36 +42,40 @@ namespace AxaTests.SWAPI.ApiService
                 {
                     if (property.Name == "Results")
                     {
-                        var propValue = property.GetValue(result);
+                        var propertyValue = property.GetValue(result);
 
-                        IEnumerable propValueArray = propValue as IEnumerable;
-
-                        foreach (var person in propValue as IEnumerable)
+                        foreach (var value in propertyValue as IEnumerable)
                         {
 
-                            Type elementType = person.GetType();
-                            var personProperties = elementType.GetProperties();
-                            foreach (var personProperty in personProperties)
+                            Type elementType = value.GetType();
+                            var valueProperties = elementType.GetProperties();
+                            foreach (var valueProperty in valueProperties)
                             {
-                                if (personProperty.Name == "Name")
+                                if (valueProperty.Name == "Name")
                                 {
-                                    characterName = personProperty.GetValue(person);
+                                    name = valueProperty.GetValue(value);
                                     continue;
                                 }
-                                if (personProperty.Name == "Homeworld")
+                                if (valueProperty.Name == "Homeworld")
                                 {
-                                    characterHomeworld = personProperty.GetValue(person);
+                                    homeworld = valueProperty.GetValue(value);
+                                    continue;
+                                }
+                                if (valueProperty.Name == "Url")
+                                {
+                                    url = valueProperty.GetValue(value);
                                     continue;
                                 }
                             }
-                            if(characterName as string == character)
+                            if (name as string == data)
                             {
                                 break;
                             }
                             else
                             {
-                                characterName = null;
-                                characterHomeworld = null;
+                                name = null;
+                                homeworld = null;
+                                url = null;
                             }
 
                         }
@@ -79,7 +83,15 @@ namespace AxaTests.SWAPI.ApiService
                 }
                 pageNumber++;
             }
-            return characterHomeworld;
+            if (url != null && homeworld == null)
+            { 
+                return url; 
+            }
+            else
+            {
+                return homeworld;
+            }
+                
         }
         public object FindPlanetName(Uri path)
         {
@@ -96,14 +108,14 @@ namespace AxaTests.SWAPI.ApiService
             Type type = result.GetType();
             var properties = type.GetProperties();
             object value = null;
-            foreach ( var property in properties)
+            foreach (var property in properties)
             {
-                if(property.Name == "Name")
+                if (property.Name == "Name")
                 {
                     value = property.GetValue(result);
-                    
+
                 }
-                
+
             }
             return value;
         }
